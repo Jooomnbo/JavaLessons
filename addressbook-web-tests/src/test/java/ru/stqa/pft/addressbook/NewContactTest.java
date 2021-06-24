@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.Select;
 public class NewContactTest {
   private WebDriver driver;
 
-  @BeforeClass(alwaysRun = true)
+  @BeforeMethod(alwaysRun = true)
   public void setUp() throws Exception {
     System.setProperty("webdriver.chrome.driver","C:\\Windows\\System32\\chromedriver\\chromedriver.exe");
     driver = new ChromeDriver();
@@ -71,7 +71,7 @@ public class NewContactTest {
     driver.findElement(By.linkText("add new")).click();
   }
 
-  @AfterClass(alwaysRun = true)
+  @AfterMethod(alwaysRun = true)
   public void tearDown() throws Exception {
     driver.quit();
   }

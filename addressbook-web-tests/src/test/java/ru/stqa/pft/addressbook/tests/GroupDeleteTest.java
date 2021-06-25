@@ -8,10 +8,10 @@ public class GroupDeleteTest extends TestBase {
 
   @Test
   public void testGroupDelete() throws Exception {
-    app.gotGroupPage();
-    app.selectGroup();
-    app.deletGroup();
-    app.gotGroupPage();
+    app.getNavigationHelper().gotGroupPage();
+    app.getGroupHelper().selectGroup();
+    app.getGroupHelper().deleteGroup();
+    app.getNavigationHelper().gotGroupPage();
   }
 
 

@@ -5,80 +5,72 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.Select;
 
-public class NewContactTest {
-  private WebDriver driver;
+public class NewContactTest extends TestBase{
+  private WebDriver wd;
 
   @BeforeMethod(alwaysRun = true)
   public void setUp() throws Exception {
     System.setProperty("webdriver.chrome.driver","C:\\Windows\\System32\\chromedriver\\chromedriver.exe");
-    driver = new ChromeDriver();
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    wd = new ChromeDriver();
+    wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     login("admin", "secret");
   }
 
   private void login(String username, String password) {
-    driver.get("http://localhost/addressbook/edit.php");
-    fillFieldByName("user", username);
-    fillFieldByName("pass", password);
-    driver.findElement(By.xpath("//input[@value='Login']")).click();
+    wd.get("http://localhost/addressbook/edit.php");
+    wd.findElement(By.name("user")).click();
+    wd.findElement(By.name("user")).clear();
+    wd.findElement(By.name("user")).sendKeys(username);
+    wd.findElement(By.name("pass")).click();
+    wd.findElement(By.name("pass")).clear();
+    wd.findElement(By.name("pass")).sendKeys(password);
+    wd.findElement(By.xpath("//input[@value='Login']")).click();
   }
 
   @Test
   public void testNewContact() throws Exception {
     addNewContact();
-    fillFieldByName("firstname", "First name");
-    fillFieldByName("middlename", "Middle name");
-    fillFieldByName("lastname", "Last Name");
-    fillFieldByName("nickname", "Nickname");
-    fillFieldByName("title", "Title");
-    fillFieldByName("company", "Company");
-    fillFieldByName("address", "Address");
-    fillFieldByName("home", "home");
-    fillFieldByName("mobile", "Mobile");
-    fillFieldByName("work", "Work");
-    fillFieldByName("fax", "Fax");
-    fillFieldByName("email", "E-mail");
-    fillFieldByName("homepage", "Homepage");
-    fillDropdownListByName("bday", "1");
-    fillDropdownListByName("bmonth", "January");
-    fillFieldByName("byear", "2000");
-    fillDropdownListByName("new_group", "test");
-    fillDropdownListByName("aday", "2");
-    fillDropdownListByName("amonth", "February");
-    fillFieldByName("ayear", "2001");
+    fillContactForm(new ContactData("First name", "Middle name", "Last Name", "address", "E-mail"));
     clickEnterButton();
-    driver.findElement(By.linkText("home")).click();
+    wd.findElement(By.linkText("home")).click();
+  }
+
+  private void fillContactForm(ContactData contactData) {
+    wd.findElement(By.name("firstname")).click();
+    wd.findElement(By.name("firstname")).clear();
+    wd.findElement(By.name("firstname")).sendKeys(contactData.getFirstName());
+    wd.findElement(By.name("middlename")).click();
+    wd.findElement(By.name("middlename")).clear();
+    wd.findElement(By.name("middlename")).sendKeys(contactData.getMiddleName());
+    wd.findElement(By.name("lastname")).click();
+    wd.findElement(By.name("lastname")).clear();
+    wd.findElement(By.name("lastname")).sendKeys(contactData.getLastName());
+    wd.findElement(By.name("address")).click();
+    wd.findElement(By.name("address")).clear();
+    wd.findElement(By.name("address")).sendKeys(contactData.getAddress());
+    wd.findElement(By.name("email")).click();
+    wd.findElement(By.name("email")).clear();
+    wd.findElement(By.name("email")).sendKeys(contactData.getEmail());
   }
 
   private void clickEnterButton() {
-    driver.findElement(By.xpath("//div[@id='content']/form/input[21]")).click();
+    wd.findElement(By.xpath("//div[@id='content']/form/input[21]")).click();
   }
 
-  private void fillDropdownListByName(String locatorByName, String fillValue) {
-    driver.findElement(By.name(locatorByName)).click();
-    new Select(driver.findElement(By.name(locatorByName))).selectByVisibleText(fillValue);
-  }
-
-  private void fillFieldByName(String fillValue, String locatorByName) {
-    driver.findElement(By.name(fillValue)).click();
-    driver.findElement(By.name(fillValue)).clear();
-    driver.findElement(By.name(fillValue)).sendKeys(locatorByName);
-  }
 
   private void addNewContact() {
-    driver.findElement(By.linkText("add new")).click();
+    wd.findElement(By.linkText("add new")).click();
   }
 
   @AfterMethod(alwaysRun = true)
   public void tearDown() throws Exception {
-    driver.quit();
+    wd.quit();
   }
 
   private boolean isElementPresent(By by) {
     try {
-      driver.findElement(by);
+      wd.findElement(by);
       return true;
     } catch (NoSuchElementException e) {
       return false;
@@ -87,7 +79,7 @@ public class NewContactTest {
 
   private boolean isAlertPresent() {
     try {
-      driver.switchTo().alert();
+      wd.switchTo().alert();
       return true;
     } catch (NoAlertPresentException e) {
       return false;

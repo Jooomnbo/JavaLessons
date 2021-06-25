@@ -5,11 +5,17 @@ import org.openqa.selenium.WebDriver;
 
 public class NavigationHelper extends  HelperBase {
 
+
+
     public NavigationHelper(WebDriver wd) {
         super(wd);
     }
 
     public void gotGroupPage() {
       click(By.linkText("groups"));
+    }
+
+    public void gotHomePage() {
+      click(By.linkText("home"));
     }
 }

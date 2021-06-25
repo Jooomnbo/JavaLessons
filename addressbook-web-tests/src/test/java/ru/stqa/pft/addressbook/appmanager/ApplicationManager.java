@@ -7,8 +7,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.concurrent.TimeUnit;
 
-public class ApplicationManager {
+public class ApplicationManager{
     public WebDriver wd;
+    protected ContactHelper contactHelper;
     private NavigationHelper navigationHelper;
     private GroupHelper groupHelper;
     private SessionHelper sessionHelper;
@@ -19,6 +20,8 @@ public class ApplicationManager {
         groupHelper = new GroupHelper(wd);
         navigationHelper = new NavigationHelper(wd);
         sessionHelper = new SessionHelper(wd);
+        contactHelper = new ContactHelper(wd);
+        wd.get("http://localhost/addressbook/edit.php");
         sessionHelper.login("admin", "secret");
     }
 
@@ -28,20 +31,15 @@ public class ApplicationManager {
         groupHelper.wd.quit();
     }
 
-    public boolean isElementPresent(By by) {
-      try {
-        wd.findElement(by);
-        return true;
-      } catch (NoSuchElementException e) {
-        return false;
-      }
-    }
-
     public GroupHelper getGroupHelper() {
         return groupHelper;
     }
 
     public NavigationHelper getNavigationHelper() {
         return navigationHelper;
+    }
+
+    public ContactHelper getContactHelper() {
+        return contactHelper;
     }
 }
